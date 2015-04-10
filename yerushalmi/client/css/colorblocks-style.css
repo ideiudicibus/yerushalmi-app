@@ -15,6 +15,7 @@ BASE (MOBILE) SIZE
 
 /* typography */
 body{
+	direction:rtl;
 	background:#fff;
 	color:#666;
 	font-family:'Droid Serif', Arial, Helvetica, sans-serif; 

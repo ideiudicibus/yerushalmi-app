@@ -1,6 +1,8 @@
 
 // Fireup the plugins
-/*	
+/*
+$(document).ready(function(){
+	
 	// initialise  slideshow
 	 $('.flexslider').flexslider({
         animation: "slide",
@@ -9,12 +11,13 @@
         }
       });
 
-});*/
+});
+*/
 /**
  * Handles toggling the navigation menu for small screens.
  */
 
- /*
+/*
 ( function() {
 	var button = document.getElementById( 'topnav' ).getElementsByTagName( 'div' )[0],
 	    menu   = document.getElementById( 'topnav' ).getElementsByTagName( 'ul' )[0];
@@ -42,3 +45,4 @@
 	};
 } )();
 */
+

@@ -9,3 +9,4 @@ insecure
 twbs:bootstrap
 bevanhunt:leaflet
 harrison:babyparse
+iron:router

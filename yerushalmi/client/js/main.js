@@ -15,5 +15,4 @@ Template.main.helpers(
 */
 Template.main.rendered = function() {
     console.log("main:rendered");
-
 };

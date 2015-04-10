@@ -5,12 +5,14 @@ $(function() {
   $(window).resize(); // trigger resize event
 });
 
-var Markers = new Meteor.Collection('markers');
+//var Markers = new Meteor.Collection('markers');
 
 Meteor.subscribe('markers');
 
 Template.map.rendered = function() {
   console.log("map: rendered");	
+  $(window).resize();
+  
   L.Icon.Default.imagePath = 'images';
 
   var map = L.map('map', {
@@ -27,33 +29,217 @@ Template.map.rendered = function() {
 	}).addTo(map);
 
   
-
-
-  var foodIcon = L.MakiMarkers.icon({icon: "restaurant", color: "#009933", size: "m"});
-  var busIcon = L.MakiMarkers.icon({icon: "bus", color: "#b0b", size: "m"});
-  var theatreIcon = L.MakiMarkers.icon({icon: "theatre", color: "#FF0000", size: "m"});
-  var musicIcon = L.MakiMarkers.icon({icon: "music", color: "#FFFF00", size: "m"});
+  var restaurantCoffeeIcon = L.MakiMarkers.icon({icon: "restaurant", color: "#009933", size: "m"});
+  var transportationIcon = L.MakiMarkers.icon({icon: "bus", color: "#b0b", size: "m"});
+  var cultureIcon = L.MakiMarkers.icon({icon: "theatre", color: "#FF0000", size: "m"});
+  var leisureIcon = L.MakiMarkers.icon({icon: "music", color: "#FFFF00", size: "m"});
   var consumerIcon = L.MakiMarkers.icon({icon: "gift", color: "#3333CC", size: "m"});
   var sportsIcon = L.MakiMarkers.icon({icon: "school", color: "#FF9900", size: "m"});
-  var enrichment = L.MakiMarkers.icon({icon: "college", color: "#663300", size: "m"});
+  var enrichmentIcon = L.MakiMarkers.icon({icon: "college", color: "#663300", size: "m"});
 
   //BUGGY CODE? Need to make map markers reactive by using OBSERVE
-  var markersArray = Markers.find({
-  category: "transportation"
-  }).fetch();
+  var transportationMarkersQuery = Markers.find({
+    category: "transportation"
+  });//.fetch();
 
-  markersArrayLength = markersArray.length; 
+  transportationMarkersQuery.observe({
+    added: function (document) {
+      //debugger;
+      //console.log("OBSERVE: added LatLng of transportation marker #" + ":" + document.lat + " | " + document.lng);
+
+      var latlng = L.latLng(parseFloat(document.lat),parseFloat(document.lng));
+
+      L.marker(latlng, {icon:transportationIcon}).bindPopup(document.htmlStr).addTo(map);
+    },
+    removed: function (oldDocument) {
+      layers = map._layers;
+      var key, val;
+      for (key in layers) {
+        val = layers[key];
+        if (val._latlng) {
+          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
+            map.removeLayer(val);
+          }
+        }
+      }
+    }
+  });
+
+  var cultureMarkersQuery = Markers.find({
+    category: "culture"
+  });
+
+  cultureMarkersQuery.observe({
+    added: function (document) {
+      //debugger;
+      //console.log("OBSERVE: added LatLng of transportation marker #" + ":" + document.lat + " | " + document.lng);
+      var latlng = L.latLng(parseFloat(document.lat),parseFloat(document.lng));
+
+      L.marker(latlng, {icon:cultureIcon}).bindPopup(document.htmlStr).addTo(map);
+    },
+    removed: function (oldDocument) {
+      layers = map._layers;
+      var key, val;
+      for (key in layers) {
+        val = layers[key];
+        if (val._latlng) {
+          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
+            map.removeLayer(val);
+          }
+        }
+      }
+    }
+  });
+
+  var leisureMarkersQuery = Markers.find({
+    category: "leisure"
+  });
+
+  leisureMarkersQuery.observe({
+    added: function (document) {
+      //debugger;
+      //console.log("OBSERVE: added LatLng of transportation marker #" + ":" + document.lat + " | " + document.lng);
+      var latlng = L.latLng(parseFloat(document.lat),parseFloat(document.lng));
+
+      L.marker(latlng, {icon:leisureIcon}).bindPopup(document.htmlStr).addTo(map);
+    },
+    removed: function (oldDocument) {
+      layers = map._layers;
+      var key, val;
+      for (key in layers) {
+        val = layers[key];
+        if (val._latlng) {
+          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
+            map.removeLayer(val);
+          }
+        }
+      }
+    }
+  });
+
+  var restaurantCoffeeMarkersQuery = Markers.find({
+    category: "restaurants_coffee"
+  });
+
+  restaurantCoffeeMarkersQuery.observe({
+    added: function (document) {
+      //debugger;
+      //console.log("OBSERVE: added LatLng of transportation marker #" + ":" + document.lat + " | " + document.lng);
+      var latlng = L.latLng(parseFloat(document.lat),parseFloat(document.lng));
+
+      L.marker(latlng, {icon:restaurantCoffeeIcon}).bindPopup(document.htmlStr).addTo(map);
+    },
+    removed: function (oldDocument) {
+      layers = map._layers;
+      var key, val;
+      for (key in layers) {
+        val = layers[key];
+        if (val._latlng) {
+          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
+            map.removeLayer(val);
+          }
+        }
+      }
+    }
+  });
+
+  var consumerMarkersQuery = Markers.find({
+    category: "consumer"
+  });
+
+  consumerMarkersQuery.observe({
+    added: function (document) {
+      //debugger;
+      console.log("OBSERVE: added LatLng of consumer marker #" + ":" + document.lat + " | " + document.lng);
+      var latlng = L.latLng(parseFloat(document.lat),parseFloat(document.lng));
+
+      L.marker(latlng, {icon:consumerIcon}).bindPopup(document.htmlStr).addTo(map);
+    },
+    removed: function (oldDocument) {
+      layers = map._layers;
+      var key, val;
+      for (key in layers) {
+        val = layers[key];
+        if (val._latlng) {
+          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
+            map.removeLayer(val);
+          }
+        }
+      }
+    }
+  });
+
+  var sportsMarkersQuery = Markers.find({
+    category: "sports"
+  });
+
+  sportsMarkersQuery.observe({
+    added: function (document) {
+      //debugger;
+      //console.log("OBSERVE: added LatLng of transportation marker #" + ":" + document.lat + " | " + document.lng);
+      var latlng = L.latLng(parseFloat(document.lat),parseFloat(document.lng));
+
+      L.marker(latlng, {icon:sportsIcon}).bindPopup(document.htmlStr).addTo(map);
+    },
+    removed: function (oldDocument) {
+      layers = map._layers;
+      var key, val;
+      for (key in layers) {
+        val = layers[key];
+        if (val._latlng) {
+          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
+            map.removeLayer(val);
+          }
+        }
+      }
+    }
+  });
   
-  for (var i = 0; i < markersArrayLength; i++) {
-  	var marker = markersArray[i];
-  	console.log("LatLng of transportation marker #"+ i + ":" + marker.lat + " | " + marker.lng);
+  var enrichmentMarkersQuery = Markers.find({
+    category: "enrichment"
+  });
 
-  	var latlng = L.latLng(parseFloat(marker.lat),parseFloat(marker.lng));
+  enrichmentMarkersQuery.observe({
+    added: function (document) {
+      //debugger;
+      //console.log("OBSERVE: added LatLng of transportation marker #" + ":" + document.lat + " | " + document.lng);
+      var latlng = L.latLng(parseFloat(document.lat),parseFloat(document.lng));
 
-	L.marker(latlng, {icon:busIcon}).bindPopup(marker.htmlStr).addTo(map);
-  };
+      L.marker(latlng, {icon:enrichmentIcon}).bindPopup(document.htmlStr).addTo(map);
+    },
+    removed: function (oldDocument) {
+      layers = map._layers;
+      var key, val;
+      for (key in layers) {
+        val = layers[key];
+        if (val._latlng) {
+          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
+            map.removeLayer(val);
+          }
+        }
+      }
+    }
+  });
+  
 
-  markersArray = Markers.find({
+
+  /*
+    markersArrayLength = markersArray.length; 
+    
+    for (var i = 0; i < markersArrayLength; i++) {
+    	var marker = markersArray[i];
+    	console.log("LatLng of transportation marker #"+ i + ":" + marker.lat + " | " + marker.lng);
+
+    	var latlng = L.latLng(parseFloat(marker.lat),parseFloat(marker.lng));
+
+  	L.marker(latlng, {icon:busIcon}).bindPopup(marker.htmlStr).addTo(map);
+    };
+  */
+
+
+  /*
+
+  var markersArray = Markers.find({
   	category: "culture"
   }).fetch();
 
@@ -147,38 +333,17 @@ Template.map.rendered = function() {
 	L.marker(latlng, {icon:enrichment}).bindPopup(marker.htmlStr).addTo(map);
   };
 
-
+  */
 
   map.setView([31.782,35.21933], 16);
 
-   /*
 
+  /*
   map.on('dblclick', function(event) {
     Markers.insert({latlng: event.latlng});
   });
 
-   var query = Markers.find();
-  query.observe({
-    added: function (document) {
-      var marker = L.marker(document.latlng).addTo(map)
-        .on('click', function(event) {
-          map.removeLayer(marker);
-          Markers.remove({_id: document._id});
-        });
-    },
-    removed: function (oldDocument) {
-      layers = map._layers;
-      var key, val;
-      for (key in layers) {
-        val = layers[key];
-        if (val._latlng) {
-          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
-            map.removeLayer(val);
-          }
-        }
-      }
-    }
-  }); */
+  */
 };
 
 

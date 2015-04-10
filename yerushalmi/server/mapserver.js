@@ -1,5 +1,3 @@
-var Markers = new Meteor.Collection('markers');
-
 var data = Assets.getText('jerusalem_businesses_geocoded.csv');
 
 var parsed = Baby.parse(data);
@@ -29,6 +27,8 @@ for (var i=0; i<len; i++){
     var str = createPopUpStr(line);
     
     var marker = {
+    	name: line[1],
+    	address: line[0],
     	lat : parseFloat(line[5]),
     	lng : parseFloat(line[4]),
     	category : line[6],
@@ -95,6 +95,7 @@ function createPopUpStr(arr) {
 	if (arr[3]!="") {
 		str += "<a href=\"http://"+arr[3]+"\" target=\"_blank\">"+arr[3]+"</a><br/>";
 	}
+	//str += arr[6] + "<br/>";
 	str += arr[7] + "<br/>" + arr[8] + "<br/>";
 	str += "</div>";
 	return str;	
